@@ -15,5 +15,6 @@ if __name__ == "__main__":
 		for newMatIter in range(int(gpsData[i][0]),int(gpsData[i+1][0])):
 			newMat[newMatIter - firstTimeStamp] = gpsData[i]
 	np.savetxt('gps_change.csv',newMat,delimiter=',')
-	plt.plot((newMat[:,0]-int(firstTimeStamp)),newMat[:,1])
+	plt.plot((newMat[:,0]-int(firstTimeStamp)),(newMat[:,1] - np.mean(newMat[:,1]))/np.std(newMat[:,1]))
+	plt.plot((newMat[:,0]-int(firstTimeStamp)),(newMat[:,2] - np.mean(newMat[:,2]))/np.std(newMat[:,2]))
 	plt.show()
