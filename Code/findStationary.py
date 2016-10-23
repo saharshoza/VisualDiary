@@ -1,6 +1,7 @@
 import numpy as np 
 import sys
 import matplotlib.pyplot as plt
+import gmplot
 
 gpsValThreshold = 0.00005
 stationaryTimeThreshold = 100
@@ -22,6 +23,19 @@ def identify_stationary(newMat):
 			stationaryLimit.append(time)
 			stationaryFlag = 0
 
+def mapPlot(newMat,secondFilterList,latMean,longMean):
+	latitudeList = []
+	longitudeList = []
+	gmap = gmplot.GoogleMapPlotter(30.28142551, -97.73600101, 16)
+	for i in range(0,len(secondFilterList),2):
+		time = secondFilterList[i] + ((secondFilterList[i+1] - secondFilterList[i])/2)
+		latitudeList.append(newMat[time,1]+latMean)
+		longitudeList.append(newMat[time,2]+longMean)
+	print latitudeList
+	print longitudeList
+	gmap.heatmap(latitudeList,longitudeList)
+	gmap.draw("heatMap.html")
+
 if __name__ == "__main__":
 	gpsIn = sys.argv[1]
 	gpsData = np.genfromtxt(gpsIn, delimiter=',')
@@ -33,8 +47,10 @@ if __name__ == "__main__":
 			newMat[newMatIter - firstTimeStamp] = gpsData[i]
 			newMat[newMatIter - firstTimeStamp][0] = newMatIter
 	np.savetxt('gps_change.csv',newMat,delimiter=',')
-	newMat[:,1] = (newMat[:,1] - np.mean(newMat[:,1]))
-	newMat[:,2] = (newMat[:,2] - np.mean(newMat[:,2]))
+	latMean = np.mean(newMat[:,1])
+	longMean = np.mean(newMat[:,2])
+	newMat[:,1] = (newMat[:,1] - latMean)
+	newMat[:,2] = (newMat[:,2] - longMean)
 	identify_stationary(newMat)
 	stationaryLimitArr = np.asarray(stationaryLimit)
 	plt.plot((newMat[:,0]-int(firstTimeStamp)),newMat[:,1],label='Latitude')
@@ -78,6 +94,9 @@ if __name__ == "__main__":
 						break
 	print secondFilterList
 	print realStationary
+
+	mapPlot(newMat,secondFilterList,latMean,longMean)
+
 	for xc in realStationary:
 		plt.axvline(x=xc,color='y')
 	for yc in secondFilterList:
