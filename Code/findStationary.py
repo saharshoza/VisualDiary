@@ -2,25 +2,27 @@ import numpy as np
 import sys
 import matplotlib.pyplot as plt
 
-threshold = 0.00005
+gpsValThreshold = 0.00005
+stationaryTimeThreshold = 100
 stationaryLimit = []
+secondFilterFlag = 0
+secondFilterList = []
+stdThreshold = 0.00005
 
 def identify_stationary(newMat):
 	stationaryFlag = 0
 	for time in range(0,newMat.shape[0]-1):	
 		print (newMat[time][1] - newMat[time+1][1])
 		print (newMat[time][2] - newMat[time+1][2])
-		print abs(threshold)
-		if (abs(newMat[time][1] - newMat[time+1][1]) <= abs(threshold)) and (abs(newMat[time][2] - newMat[time+1][2]) <= abs(threshold)) and stationaryFlag == 0:
+		print abs(gpsValThreshold)
+		if (abs(newMat[time][1] - newMat[time+1][1]) <= abs(gpsValThreshold)) and (abs(newMat[time][2] - newMat[time+1][2]) <= abs(gpsValThreshold)) and stationaryFlag == 0:
 			stationaryLimit.append(time)
 			stationaryFlag = 1
-		if (abs(newMat[time][1] - newMat[time+1][1]) > abs(threshold)) and (abs(newMat[time][2] - newMat[time+1][2]) > abs(threshold)) and stationaryFlag == 1:
+		if (abs(newMat[time][1] - newMat[time+1][1]) > abs(gpsValThreshold)) and (abs(newMat[time][2] - newMat[time+1][2]) > abs(gpsValThreshold)) and stationaryFlag == 1:
 			stationaryLimit.append(time)
 			stationaryFlag = 0
 
 if __name__ == "__main__":
-	
-	#Get File
 	gpsIn = sys.argv[1]
 	gpsData = np.genfromtxt(gpsIn, delimiter=',')
 	firstTimeStamp = int(gpsData[0][0])
@@ -31,8 +33,6 @@ if __name__ == "__main__":
 			newMat[newMatIter - firstTimeStamp] = gpsData[i]
 			newMat[newMatIter - firstTimeStamp][0] = newMatIter
 	np.savetxt('gps_change.csv',newMat,delimiter=',')
-	#newMat[:,1] = (newMat[:,1] - np.mean(newMat[:,1]))/(newMat[newMat.shape[0]-1,1]-newMat[0,1])
-	#newMat[:,2] = (newMat[:,2] - np.mean(newMat[:,2]))/(newMat[newMat.shape[0]-1,2]-newMat[0,2])
 	newMat[:,1] = (newMat[:,1] - np.mean(newMat[:,1]))
 	newMat[:,2] = (newMat[:,2] - np.mean(newMat[:,2]))
 	identify_stationary(newMat)
@@ -43,11 +43,45 @@ if __name__ == "__main__":
 	print stationaryLimit
 	realStationary = []
 	for i in range(0,len(stationaryLimit)-1,2):
-		if(stationaryLimit[i+1] - stationaryLimit[i] > 100):
+		if(stationaryLimit[i+1] - stationaryLimit[i] > stationaryTimeThreshold):
 			realStationary.append(stationaryLimit[i])
 			realStationary.append(stationaryLimit[i+1])
+	print realStationary
+	for secondFilterIter in range(0,len(realStationary),2):
+		print secondFilterIter
+		frameAdaptive = 0
+		for frameIter in range(realStationary[secondFilterIter], realStationary[secondFilterIter+1]):
+			print frameIter
+			if realStationary[secondFilterIter+1] - frameIter < stationaryTimeThreshold:
+				if secondFilterFlag == 1:
+					secondFilterList.append(frameIter+stationaryTimeThreshold)
+					secondFilterFlag = 0
+				break
+			else:
+				idx = frameIter - frameAdaptive
+				print frameAdaptive
+				print 'blah'
+				latStd = np.std(newMat[ idx : frameIter+stationaryTimeThreshold,1])
+				longStd = np.std(newMat[idx : frameIter+stationaryTimeThreshold,2])
+				if latStd < stdThreshold and longStd < stdThreshold:
+					if secondFilterFlag == 0:
+						secondFilterList.append(frameIter)
+						secondFilterFlag = 1
+						frameAdaptive = 0
+					else:
+						frameAdaptive += 1
+				else:
+					if secondFilterFlag == 1:
+						secondFilterList.append(frameIter+stationaryTimeThreshold)
+						secondFilterFlag = 0
+						frameAdaptive = 0
+						break
+	print secondFilterList
+	print realStationary
 	for xc in realStationary:
-		plt.axvline(x=xc)
+		plt.axvline(x=xc,color='y')
+	for yc in secondFilterList:
+		plt.axvline(x=yc,color='r')
 	plt.xlabel('Time')
 	plt.ylabel('GPS Data')
 	plt.grid()
