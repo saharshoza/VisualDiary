@@ -12,5 +12,5 @@ for rowIterator in dataset:
 	longitudeList.append(rowIterator[2])
 print latitudeList
 print longitudeList
-gmap.heatmap(latitudeList,longitudeList)
+gmap.heatmap(latitudeList,longitudeList, 10, 15, None, 0.8, True)
 gmap.draw("myMap.html")
