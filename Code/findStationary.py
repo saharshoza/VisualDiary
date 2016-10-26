@@ -2,6 +2,7 @@ import numpy as np
 import sys
 import matplotlib.pyplot as plt
 import gmplot
+from geopy.geocoders import Nominatim
 
 gpsValThreshold = 0.00005
 stationaryTimeThreshold = 100
@@ -9,6 +10,7 @@ stationaryLimit = []
 secondFilterFlag = 0
 secondFilterList = []
 stdThreshold = 0.00005
+geolocator = Nominatim()
 
 def identify_stationary(newMat):
 	stationaryFlag = 0
@@ -22,6 +24,15 @@ def identify_stationary(newMat):
 		if (abs(newMat[time][1] - newMat[time+1][1]) > abs(gpsValThreshold)) and (abs(newMat[time][2] - newMat[time+1][2]) > abs(gpsValThreshold)) and stationaryFlag == 1:
 			stationaryLimit.append(time)
 			stationaryFlag = 0
+
+def generateAddressFromLocation(newMat, secondFilterList, latMean, longMean):
+	for i in range(0,len(secondFilterList),2):
+		timeStampMean = (secondFilterList[i]+secondFilterList[i+1])/2
+		locationLat = newMat[timeStampMean][1] + latMean
+		locationLong = newMat[timeStampMean][2] + longMean
+		correspondingLocation = (locationLat,locationLong)
+		stationaryLocation = geolocator.reverse(correspondingLocation)
+		print "The user was stationary at " + stationaryLocation.address
 
 def mapPlot(newMat,secondFilterList,latMean,longMean):
 	latitudeList = []
@@ -46,7 +57,7 @@ if __name__ == "__main__":
 		for newMatIter in range(int(gpsData[i][0]),int(gpsData[i+1][0])):
 			newMat[newMatIter - firstTimeStamp] = gpsData[i]
 			newMat[newMatIter - firstTimeStamp][0] = newMatIter
-	np.savetxt('gps_change.csv',newMat,delimiter=',')
+	#np.savetxt('gps_change.csv',newMat,delimiter=',')
 	latMean = np.mean(newMat[:,1])
 	longMean = np.mean(newMat[:,2])
 	newMat[:,1] = (newMat[:,1] - latMean)
@@ -96,6 +107,7 @@ if __name__ == "__main__":
 	print realStationary
 
 	mapPlot(newMat,secondFilterList,latMean,longMean)
+	generateAddressFromLocation(newMat,secondFilterList,latMean,longMean)
 
 	for xc in realStationary:
 		plt.axvline(x=xc,color='y')
