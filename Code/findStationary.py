@@ -2,7 +2,7 @@ import numpy as np
 import sys
 import matplotlib.pyplot as plt
 import gmplot
-from geopy.geocoders import Nominatim
+#from geopy.geocoders import Nominatim
 
 gpsValThreshold = 0.00005
 stationaryTimeThreshold = 100
@@ -10,14 +10,14 @@ stationaryLimit = []
 secondFilterFlag = 0
 secondFilterList = []
 stdThreshold = 0.00005
-geolocator = Nominatim()
+#geolocator = Nominatim()
 
 def identify_stationary(newMat):
 	stationaryFlag = 0
 	for time in range(0,newMat.shape[0]-1):	
-		print (newMat[time][1] - newMat[time+1][1])
-		print (newMat[time][2] - newMat[time+1][2])
-		print abs(gpsValThreshold)
+		#print (newMat[time][1] - newMat[time+1][1])
+		#print (newMat[time][2] - newMat[time+1][2])
+		#print abs(gpsValThreshold)
 		if (abs(newMat[time][1] - newMat[time+1][1]) <= abs(gpsValThreshold)) and (abs(newMat[time][2] - newMat[time+1][2]) <= abs(gpsValThreshold)) and stationaryFlag == 0:
 			stationaryLimit.append(time)
 			stationaryFlag = 1
@@ -25,14 +25,14 @@ def identify_stationary(newMat):
 			stationaryLimit.append(time)
 			stationaryFlag = 0
 
-def generateAddressFromLocation(newMat, secondFilterList, latMean, longMean):
-	for i in range(0,len(secondFilterList),2):
-		timeStampMean = (secondFilterList[i]+secondFilterList[i+1])/2
-		locationLat = newMat[timeStampMean][1] + latMean
-		locationLong = newMat[timeStampMean][2] + longMean
-		correspondingLocation = (locationLat,locationLong)
-		stationaryLocation = geolocator.reverse(correspondingLocation)
-		print "The user was stationary at " + stationaryLocation.address
+#def generateAddressFromLocation(newMat, secondFilterList, latMean, longMean):
+#	for i in range(0,len(secondFilterList),2):
+#		timeStampMean = (secondFilterList[i]+secondFilterList[i+1])/2
+#		locationLat = newMat[timeStampMean][1] + latMean
+#		locationLong = newMat[timeStampMean][2] + longMean
+#		correspondingLocation = (locationLat,locationLong)
+#		stationaryLocation = geolocator.reverse(correspondingLocation)
+#		print "The user was stationary at " + stationaryLocation.address
 
 def mapPlot(newMat,secondFilterList,latMean,longMean):
 	latitudeList = []
@@ -42,8 +42,8 @@ def mapPlot(newMat,secondFilterList,latMean,longMean):
 		time = secondFilterList[i] + ((secondFilterList[i+1] - secondFilterList[i])/2)
 		latitudeList.append(newMat[time,1]+latMean)
 		longitudeList.append(newMat[time,2]+longMean)
-	print latitudeList
-	print longitudeList
+	#print latitudeList
+	#print longitudeList
 	gmap.heatmap(latitudeList,longitudeList)
 	gmap.draw("heatMap.html")
 
@@ -73,12 +73,12 @@ if __name__ == "__main__":
 		if(stationaryLimit[i+1] - stationaryLimit[i] > stationaryTimeThreshold):
 			realStationary.append(stationaryLimit[i])
 			realStationary.append(stationaryLimit[i+1])
-	print realStationary
+	#print realStationary
 	for secondFilterIter in range(0,len(realStationary),2):
-		print secondFilterIter
+		#print secondFilterIter
 		frameAdaptive = 0
 		for frameIter in range(realStationary[secondFilterIter], realStationary[secondFilterIter+1]):
-			print frameIter
+			#print frameIter
 			if realStationary[secondFilterIter+1] - frameIter < stationaryTimeThreshold:
 				if secondFilterFlag == 1:
 					secondFilterList.append(frameIter+stationaryTimeThreshold)
@@ -86,8 +86,8 @@ if __name__ == "__main__":
 				break
 			else:
 				idx = frameIter - frameAdaptive
-				print frameAdaptive
-				print 'blah'
+				#print frameAdaptive
+				#print 'blah'
 				latStd = np.std(newMat[ idx : frameIter+stationaryTimeThreshold,1])
 				longStd = np.std(newMat[idx : frameIter+stationaryTimeThreshold,2])
 				if latStd < stdThreshold and longStd < stdThreshold:
@@ -103,8 +103,8 @@ if __name__ == "__main__":
 						secondFilterFlag = 0
 						frameAdaptive = 0
 						break
-	print secondFilterList
-	print realStationary
+	#print secondFilterList
+	#print realStationary
 
 	mapPlot(newMat,secondFilterList,latMean,longMean)
 	generateAddressFromLocation(newMat,secondFilterList,latMean,longMean)
