@@ -69,10 +69,17 @@ if __name__ == "__main__":
 	path_to_video = sys.argv[1]
 	path_to_frames = sys.argv[2]
 	model_dir = sys.argv[3]
-	frame_extractor(path_to_video,path_to_frames)
-	extract_features = ExtractFeatures(model_dir,images_dir)
-	extract_features.create_graph()
-	features = extract_features.extract_features()
-	pickle.dump(features, open('features', 'wb'))
+    extract_frames_flag = int(sys.argv[4])
+    extract_features_flag = int(sys.argv[5])
+    if extract_frames_flag == 1:
+        print 'Extract frames'
+	   frame_extractor(path_to_video,path_to_frames)
+    if extract_features_flag == 1:
+        print 'Extract features'
+	   extract_features = ExtractFeatures(model_dir,images_dir)
+	   extract_features.create_graph()
+	   features = extract_features.extract_features()
+	   pickle.dump(features, open('features', 'wb'))
     diff_vector = saliency_vector(features)
+    print diff_vector.shape
     pickle.dump(diff_vector, open('diff_vector','wb'))
