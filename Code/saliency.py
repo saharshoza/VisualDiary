@@ -14,12 +14,18 @@ import matplotlib.pyplot as plt
 import pickle
 import av
 
+def saliency_vector(features):
+    feature_1 = np.vstack((np.zeros(1,features.shape[1]),features))
+    feature_2 = np.vstack((features,np.zeros(1,features.shape[1])))
+    diff_vector = feature_2 - feature_1
+    return diff_vector
+
 def frame_extractor(path_to_video,path_to_frames):
     container = av.open(path_to_video)
     video = next(s for s in container.streams if s.type == b'video')
     for packet in container.demux(video):
         for frame in packet.decode():
-            frame.to_image().save(path_to_frames+'/frame-%04d.jpg' % frame.index)
+            frame.to_image().save(path_to_frames+'/frame-%06d.jpg' % frame.index)
 
 
 class ExtractFeatures:
@@ -53,13 +59,10 @@ class ExtractFeatures:
                 if not gfile.Exists(image):
                     tf.logging.fatal('File does not exist %s', image)
                     continue
-
                 image_data = gfile.FastGFile(image, 'rb').read()
                 predictions = sess.run(next_to_last_tensor,{'DecodeJpeg/contents:0': image_data})
                 features[ind,:] = np.squeeze(predictions)
-                labels.append(re.split('_\d+',image.split('/')[1])[0])
-
-        return features, labels
+        return features
 
 
 if __name__ == "__main__":
@@ -69,5 +72,7 @@ if __name__ == "__main__":
 	frame_extractor(path_to_video,path_to_frames)
 	extract_features = ExtractFeatures(model_dir,images_dir)
 	extract_features.create_graph()
-	features, labels= extract_features.extract_features()
+	features = extract_features.extract_features()
 	pickle.dump(features, open('features', 'wb'))
+    diff_vector = saliency_vector(features)
+    pickle.dump(diff_vector, open('diff_vector','wb'))
