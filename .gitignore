@@ -1,0 +1,8 @@
+*.DS_Store
+
+Code/*.mp4
+Code/*.jpg
+Code/*.png
+Code/frames/
+data/
+results/
