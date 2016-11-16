@@ -1,5 +1,7 @@
 *.DS_Store
-
+.ipynb_checkpoints/
+UnsupNet-change-point.ipynb
+Code/.ipynb_checkpoints/
 Code/*.mp4
 Code/*.jpg
 Code/*.png
