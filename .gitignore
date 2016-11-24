@@ -9,5 +9,5 @@ Code/frames/
 data/
 results/
 gif/
-examples/
 misc/
+examples/*/*
