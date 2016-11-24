@@ -10,4 +10,12 @@ data/
 results/
 gif/
 misc/
-examples/*/*
+examples/1/*
+examples/0/input/frames/*
+examples/0/results/cnn_diff_tmp/*
+examples/0/results/gif/*
+examples/0/results/gps_out/*
+examples/0/results/combined_frames_tmp/*
+examples/0/results/pixel_diff_tmp/*
+examples/0/results/pixel_cnn_compare/*
+
