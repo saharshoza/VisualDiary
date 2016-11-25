@@ -108,6 +108,8 @@ class GpsDataProcessor(object):
             prev_interval = cur_interval
             if start is None:
                 start, end = prev_interval
+        if merged_intervals == []:
+            merged_intervals.append([start,end])
         return merged_intervals
             
     def fill_data(self):
