@@ -10,6 +10,7 @@ data/
 results/
 gif/
 misc/
+examples/0/*
 examples/1/*
 examples/0/input/frames/*
 examples/0/results/cnn_diff_tmp/*

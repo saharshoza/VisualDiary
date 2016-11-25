@@ -5,10 +5,10 @@
 
 import numpy as np
 import sys
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import logging
 import os
-get_ipython().magic(u'matplotlib inline')
+#get_ipython().magic(u'matplotlib inline')
 
 
 # In[2]:
@@ -138,20 +138,20 @@ if __name__ == "__main__":
     gps_motion_detector = GpsDataProcessor(DATA_FILE)
     gps_motion_detector.fill_data()
     rest_intervals = gps_motion_detector.slope_filter()
-    gps_motion_detector.plot_graph(rest_intervals)
+    #gps_motion_detector.plot_graph(rest_intervals)
 
 
 # In[5]:
 
 rest_intervals = gps_motion_detector.time_filter(rest_intervals)
-gps_motion_detector.plot_graph(rest_intervals)
+#gps_motion_detector.plot_graph(rest_intervals)
 
 
 # In[6]:
 
 rest_intervals = gps_motion_detector.merge_small_intervals(rest_intervals)
 np.save(os.path.join(OUT_DIR,'gps_out'),np.asarray(rest_intervals))
-gps_motion_detector.plot_graph(rest_intervals)
+#gps_motion_detector.plot_graph(rest_intervals)
 
 
 # In[7]:

@@ -14,24 +14,26 @@ import math
 import pickle
 
 # Image related imports
-import av # TODO: Remove this after porting to PIL
+#import av # TODO: Remove this after porting to PIL
 from PIL import Image
 # from resizeimage import resizeimage
 from images2gif import writeGif
 
-import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
 import pickle
 
 #import seaborn as sns; sns.set()
-get_ipython().magic(u'matplotlib inline')
+#get_ipython().magic(u'matplotlib inline')
 
 
 # In[2]:
 
 path_to_video = 'test.mp4'
-data_dir = '../examples/0/input/'
+data_dir = '../examples/1/input/'
 model_dir = '../imagenet/classify_image_graph_def.pb'
-results_dir = '../examples/0/results/'
+results_dir = '../examples/1/results/'
 images_dir = os.path.join(data_dir, 'frames/')
 cnn_diff_dir = os.path.join(results_dir, 'cnn_diff_tmp')
 pixel_diff_dir = os.path.join(results_dir, 'pixel_diff_tmp')
@@ -235,6 +237,7 @@ class VideoLocChangePoint:
             indices_in_window = self.get_top_k(start,end)
             changepoints += [a+start for a in indices_in_window]
             start = end
+	changepoints = [int(cp_float) for cp_float in changepoints]
         return changepoints
 
 
@@ -272,7 +275,7 @@ class EvaluationMetric:
 # In[10]:
 
 if __name__ == "__main__":
-    
+
     # Feature Processor class to extract features from pre trained model
     feature_processor = FeatureProcessor(model_dir, images_dir)
     feature_processor.create_graph()
