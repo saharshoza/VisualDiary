@@ -305,21 +305,21 @@ if __name__ == "__main__":
         pickle.dump([cnn_differences,pixel_differences,cnn_change_points,pixel_change_points,vid_gps_changepoints,cnn_penalty,vid_gps_penalty],f)
     
     # Instantiate class to give plots, gif and video
-    plotter_out = PlotterOut(cnn_differences)
+    #plotter_out = PlotterOut(cnn_differences)
     
     # Generate gif using cnn, pixel and video + gps
-    plotter_out.generate_gif(cnn_change_points, images_dir, path_to_gif+'/cnn.gif')
-    plotter_out.generate_gif(pixel_change_points, images_dir, path_to_gif+'/pixel.gif')
-    plotter_out.generate_gif(vid_gps_changepoints, images_dir, path_to_gif+'/gps_vid.gif')
+    #plotter_out.generate_gif(cnn_change_points, images_dir, path_to_gif+'/cnn.gif')
+    #plotter_out.generate_gif(pixel_change_points, images_dir, path_to_gif+'/pixel.gif')
+    #plotter_out.generate_gif(vid_gps_changepoints, images_dir, path_to_gif+'/gps_vid.gif')
     
     # Plot the differences in saliency identified by cnn and features separately
-    plotter_out.plot_differences(plotter_out.get_smoothed_list(cnn_differences), plotter_out.get_smoothed_list(pixel_differences),path_to_pixel_cnn_compare)
+    #plotter_out.plot_differences(plotter_out.get_smoothed_list(cnn_differences), plotter_out.get_smoothed_list(pixel_differences),path_to_pixel_cnn_compare)
     
     # This is for generating video showing the cnn superiority over pixel differences.
     # Uncomment this for all but demo video sequence (200 frames at max)
-    plotter_out.save_difference_plots(cnn_differences, cnn_diff_dir, '#ff6666')
-    plotter_out.save_difference_plots(pixel_differences, pixel_diff_dir, '#79cdcd')
-    plotter_out.combine_images()
+    #plotter_out.save_difference_plots(cnn_differences, cnn_diff_dir, '#ff6666')
+    #plotter_out.save_difference_plots(pixel_differences, pixel_diff_dir, '#79cdcd')
+    #plotter_out.combine_images()
     
     #Use this on command line to convert to video
     #ffmpeg -f image2 -r 24 -i %06d.png -vcodec mpeg4 -y movie.mp4
