@@ -10,6 +10,7 @@ data/
 results/
 gif/
 misc/
+examples/demo/*
 examples/0/*
 examples/1/*
 examples/0/input/frames/*

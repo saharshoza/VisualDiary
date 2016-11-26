@@ -237,7 +237,7 @@ class VideoLocChangePoint:
             indices_in_window = self.get_top_k(start,end)
             changepoints += [a+start for a in indices_in_window]
             start = end
-	changepoints = [int(cp_float) for cp_float in changepoints]
+	    changepoints = [int(cp_float) for cp_float in changepoints]
         return changepoints
 
 
