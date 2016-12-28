@@ -45,3 +45,7 @@ The result of using GPS was clear in this graph. The Y axis represents the diffe
 *Location aware summarizer*
 
 ![](https://github.com/saharshoza/VisualDiary/blob/gh-pages/loc_aware.jpeg?raw=true)
+
+## Okay... So now what
+
+Unfortunately the videos we took were too mundane (walking to library, ordering food etc) to make for a fancy demonstration. But the idea is to create a gif from the change points detected by including roughly 10 consecutive frames before and after each change point detected. This set of gifs is the Visual Diary.
