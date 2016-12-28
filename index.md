@@ -4,9 +4,9 @@ In this post I will describe a fun lifelogging application I built over the fall
 
 My motivation to use deep learning to solve the video summary problem came from a [report](http://cs231n.stanford.edu/reports2016/213_Report.pdf) I read after completing the [cs231n](http://cs231n.stanford.edu/) course. To make the summary more representative of the entire journey, I decided to overlay GPS data on the video summary.
 
-![](https://github.com/saharshoza/VisualDiary/blob/gh-pages/visdiary?raw=true)
-
 *I'm a fan a huge fan of drawing boxes. So here's one. Enter comments stating the obvious*
+
+![](https://github.com/saharshoza/VisualDiary/blob/gh-pages/visdiary?raw=true)
 
 ## Video Summary
 
@@ -22,22 +22,26 @@ The number of such salient images to be detected is bounded to a fixed number. H
 
 I plotted the latitude and longitude against time and fixed a threshold for both. If the variation was below this threshold for both, the user was at rest. 
 
-(https://github.com/saharshoza/VisualDiary/blob/gh-pages/gps)
 *I also like plotting things. Writing things on graphs makes you look smart.*
+
+![](https://github.com/saharshoza/VisualDiary/blob/gh-pages/gps)
 
 ## Why use GPS?
 
 Using change points alone would over represent video segments with more objects and possibly miss out on activities like working on a desk. In order to make the summary representative of more activities, I decided to use GPS data to demarcate periods of motion and rest in the video. This demarcation was then used to enforce a fixed number of change points in each period of rest and motion. 
 
-(https://github.com/saharshoza/VisualDiary/blob/gh-pages/loc_aware_concept.png)
 *More boxes. The penalty is assigned to those activities which are not present in final summary. Conceptually, the location aware summarizer is expected to represent the activities in the day better.*
+
+![](https://github.com/saharshoza/VisualDiary/blob/gh-pages/loc_aware_concept.png)
 
 ## How did this help?
 
 The result of using GPS was clear in this graph. The Y axis represents the differences between consecutive frames. The blue lies denote the demarcation between rest and motion. Without GPS data most of the red dots (salient frames) are clustered in a small segment of the video where the differences are high. But a location aware video summarizer forces the red dots to be distributed across regions of rest and motion.
 
-(https://github.com/saharshoza/VisualDiary/blob/gh-pages/loc_agnostic.jpeg)
 *Location agnostic summarizer*
 
-(https://github.com/saharshoza/VisualDiary/blob/gh-pages/loc_aware.jpeg)
+![](https://github.com/saharshoza/VisualDiary/blob/gh-pages/loc_agnostic.jpeg)
+
 *Location aware summarizer*
+
+![](https://github.com/saharshoza/VisualDiary/blob/gh-pages/loc_aware.jpeg)
