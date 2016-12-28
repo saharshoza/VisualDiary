@@ -24,7 +24,7 @@ I plotted the latitude and longitude against time and fixed a threshold for both
 
 *I also like plotting things. Writing things on graphs makes you look smart.*
 
-![](https://github.com/saharshoza/VisualDiary/blob/gh-pages/gps)
+![](https://github.com/saharshoza/VisualDiary/blob/gh-pages/gps?raw=true)
 
 ## Why use GPS?
 
@@ -32,7 +32,7 @@ Using change points alone would over represent video segments with more objects 
 
 *More boxes. The penalty is assigned to those activities which are not present in final summary. Conceptually, the location aware summarizer is expected to represent the activities in the day better.*
 
-![](https://github.com/saharshoza/VisualDiary/blob/gh-pages/loc_aware_concept.png)
+![](https://github.com/saharshoza/VisualDiary/blob/gh-pages/loc_aware_concept.png?raw=true)
 
 ## How did this help?
 
@@ -40,8 +40,8 @@ The result of using GPS was clear in this graph. The Y axis represents the diffe
 
 *Location agnostic summarizer*
 
-![](https://github.com/saharshoza/VisualDiary/blob/gh-pages/loc_agnostic.jpeg)
+![](https://github.com/saharshoza/VisualDiary/blob/gh-pages/loc_agnostic.jpeg?raw=true)
 
 *Location aware summarizer*
 
-![](https://github.com/saharshoza/VisualDiary/blob/gh-pages/loc_aware.jpeg)
+![](https://github.com/saharshoza/VisualDiary/blob/gh-pages/loc_aware.jpeg?raw=true)
