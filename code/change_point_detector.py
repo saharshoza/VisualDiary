@@ -30,6 +30,8 @@ import pickle
 
 # In[2]:
 
+
+#change point detector
 path_to_video = 'test.mp4'
 data_dir = '../examples/1/input/'
 model_dir = '../imagenet/classify_image_graph_def.pb'
